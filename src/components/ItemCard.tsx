@@ -4,19 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Calendar, AlertCircle, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-
-interface Item {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  type: "lost" | "found";
-  location: string;
-  date: string;
-  image?: string;
-  urgent?: boolean;
-  contactInfo: string;
-}
+import { Item } from "@/data/itemStore";
 
 interface ItemCardProps {
   item: Item;

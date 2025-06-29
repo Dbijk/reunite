@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar, MapPin, Upload, AlertCircle, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { addItem } from "@/data/itemStore";
 
 const ReportLost = () => {
   const navigate = useNavigate();
@@ -41,13 +42,28 @@ const ReportLost = () => {
       return;
     }
 
-    // Simulate submission
-    toast.success("Lost item report submitted successfully! We'll notify you if there are any matches.");
-    
-    // Redirect to browse page after a short delay
-    setTimeout(() => {
-      navigate("/browse");
-    }, 2000);
+    try {
+      // Add the item to the store
+      const newItem = addItem({
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        location: formData.location,
+        date: formData.date || new Date().toISOString().split('T')[0],
+        type: "lost",
+        contactInfo: formData.contactEmail,
+        urgent: formData.urgent
+      });
+
+      toast.success("Lost item report submitted successfully! We'll notify you if there are any matches.");
+      
+      // Redirect to browse page after a short delay
+      setTimeout(() => {
+        navigate("/browse");
+      }, 2000);
+    } catch (error) {
+      toast.error("Failed to submit report. Please try again.");
+    }
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {

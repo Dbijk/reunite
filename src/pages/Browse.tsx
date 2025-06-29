@@ -1,18 +1,17 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Grid, List, MapPin, Bell } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search, Grid, List, Bell } from "lucide-react";
 import { ItemCard } from "@/components/ItemCard";
-import { mockItems } from "@/data/mockData";
+import { getItems, Item } from "@/data/itemStore";
 
 const Browse = () => {
+  const [items, setItems] = useState<Item[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -24,7 +23,12 @@ const Browse = () => {
     "Clothing", "Bags", "Books", "Sports Equipment", "Other"
   ];
 
-  const filteredItems = mockItems.filter(item => {
+  useEffect(() => {
+    // Load items on component mount
+    setItems(getItems());
+  }, []);
+
+  const filteredItems = items.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
